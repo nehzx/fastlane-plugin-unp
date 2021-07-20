@@ -1,0 +1,3 @@
+lane :test do
+  unp(api_key: "df6230c959a2173e33592c88606459aa", update_description: "desc",ipa: "/Users/xuzhen/Desktop/unipets-iOS/unipal/unipal/build/Release/unipal.ipa" )
+end
