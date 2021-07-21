@@ -42,7 +42,7 @@ module Fastlane
           }
         }
 
-        pgyer_client = Faraday.new(nil, conn_options) do |c|
+        pager_client = Faraday.new(nil, conn_options) do |c|
           c.request(:multipart)
           c.request(:url_encoded)
           c.response(:json, content_type: /\bjson$/)
@@ -57,14 +57,14 @@ module Fastlane
           'buildUpdateDescription' => update_description
         }
         UI.message("开始上传#{build_file}到蒲公英")
-        response = pgyer_client.post api_host, params
+        response = pager_client.post(api_host, params)
         info = response.body
 
         if info['code'] != 0
           UI.user_error!("上传失败#{info['message']}")
         end
-        UI.success("上传成功#{info['data']['buildShortcutUrl']}")
-
+        UI.success("上传成功 https://www.pgyer.com/#{info['data']['buildShortcutUrl']}")
+        return "https://www.pgyer.com/#{info['data']['buildShortcutUrl']}"
       end
 
       def self.description
@@ -76,7 +76,7 @@ module Fastlane
       end
 
       def self.return_value
-        # If your method provides a return value, you can describe here what it does
+        # 返回上传链接
       end
 
       def self.details
@@ -121,7 +121,7 @@ module Fastlane
         # Adjust this if your plugin only works for a particular platform (iOS vs. Android, for example)
         # See: https://docs.fastlane.tools/advanced/#control-configuration-by-lane-and-by-platform
         #
-        [:ios, :mac, :android].include?(platform)
+        [:ios].include?(platform)
         true
       end
     end
